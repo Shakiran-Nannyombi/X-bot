@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 import os
 
 # Try to import SECRET_KEY from secret.py in development
@@ -25,6 +27,11 @@ class Config:
         'afternoon': '13:30',
         'evening': '20:00'
     }
+
+    # LLM API keys
+    OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
+    GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
+    OLLAMA_BASE_URL = os.environ.get('OLLAMA_BASE_URL', 'http://localhost:11434')  # Default Ollama URL
 
 class DevelopmentConfig(Config):
     """Development configuration"""

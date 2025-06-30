@@ -41,6 +41,7 @@
                     <option value="trending">🔥 Trending Topic</option>
                     <option value="reply">💬 Reply Suggestion</option>
                     <option value="meme">😂 Meme Concept</option>
+                    <option value="collaborative">🤝 Collaborative Project</option>
                 </select>
             </div>
             
@@ -54,6 +55,14 @@
                     <option value="Machine Learning">Machine Learning</option>
                     <option value="Web Development">Web Development</option>
                     <option value="Career">Career</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">AI Provider</label>
+                <select id="ai-provider" class="select-field">
+                    <option value="openai">OpenAI (GPT-4o)</option>
+                    <option value="gemini">Gemini (Google)</option>
                 </select>
             </div>
         </div>
@@ -85,6 +94,54 @@
                 🔄
             </button>
         </div>
+    </div>
+
+    <!-- Meme Generator -->
+    <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4">Meme Generator</h2>
+        <form id="meme-form" enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="form-label">Meme Template Image</label>
+                <input type="file" id="meme-template" name="template" accept="image/*" class="select-field" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Caption</label>
+                <input type="text" id="meme-caption" name="caption" class="select-field" placeholder="Enter your meme caption" required>
+            </div>
+            <button type="submit" class="btn-primary w-full">Generate Meme 🖼️</button>
+        </form>
+        <div id="meme-result" class="mt-4 text-center"></div>
+    </div>
+
+    <!-- Tech News & Trends -->
+    <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4">Tech News & Trends</h2>
+        <div class="flex gap-2 mb-4">
+            <button id="fetch-github" class="btn-primary flex-1">GitHub Trending</button>
+            <button id="fetch-hackernews" class="btn-primary flex-1">Hacker News</button>
+            <button id="fetch-devto" class="btn-primary flex-1">dev.to</button>
+        </div>
+        <div id="news-results" class="mt-2"></div>
+    </div>
+
+    <!-- Sentiment Analysis -->
+    <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4">Sentiment Analysis</h2>
+        <form id="sentiment-form">
+            <div class="form-group">
+                <label class="form-label">Text to Analyze</label>
+                <textarea id="sentiment-text" class="select-field" rows="3" placeholder="Paste or type text here..."></textarea>
+            </div>
+            <button type="submit" class="btn-primary w-full">Analyze Sentiment 🧠</button>
+        </form>
+        <div id="sentiment-result" class="mt-4 text-center"></div>
+    </div>
+
+    <!-- Export Content -->
+    <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4">Export Content</h2>
+        <button id="export-content-btn" class="btn-primary w-full">Export as CSV 📥</button>
+        <div id="export-content-result" class="mt-2 text-center"></div>
     </div>
 </div>
 

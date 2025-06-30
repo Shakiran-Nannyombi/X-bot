@@ -566,3 +566,199 @@ class XGrowthBot {
     bot = new XGrowthBot()
   })
   
+  // AI-Powered Post Generation
+  function generateAIPost() {
+    const contentType = document.getElementById('content-type').value;
+    const topic = document.getElementById('topic').value;
+    const provider = document.getElementById('ai-provider').value;
+    let prompt = `Write a Twitter post about ${topic || 'a trending topic'} as if you're a friendly, witty developer. The post should be a ${contentType} and sound human, engaging, and slightly imperfect.`;
+    
+    // Show loading state
+    const outputDiv = document.getElementById('content-output');
+    outputDiv.classList.remove('hidden');
+    document.getElementById('generated-text').textContent = 'Generating with AI...';
+    document.getElementById('char-count').textContent = '';
+
+    fetch('/ai-generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, provider })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.content) {
+            document.getElementById('generated-text').textContent = data.content;
+            document.getElementById('char-count').textContent = `${data.content.length} chars`;
+        } else {
+            document.getElementById('generated-text').textContent = data.error || 'Error generating content.';
+        }
+    })
+    .catch(() => {
+        document.getElementById('generated-text').textContent = 'Error connecting to AI service.';
+    });
+  }
+
+  // Add AI button to generator tab
+  window.addEventListener('DOMContentLoaded', function() {
+    const genBtn = document.getElementById('generate-btn');
+    if (genBtn && !document.getElementById('ai-generate-btn')) {
+        const aiBtn = document.createElement('button');
+        aiBtn.id = 'ai-generate-btn';
+        aiBtn.className = 'btn-primary w-full mt-2';
+        aiBtn.textContent = 'AI-Powered Post 🤖';
+        aiBtn.onclick = generateAIPost;
+        genBtn.parentNode.insertBefore(aiBtn, genBtn.nextSibling);
+    }
+  });
+  
+  // Meme Generator Form Handler
+  window.addEventListener('DOMContentLoaded', function() {
+    const memeForm = document.getElementById('meme-form');
+    if (memeForm) {
+      memeForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const templateInput = document.getElementById('meme-template');
+        const captionInput = document.getElementById('meme-caption');
+        const resultDiv = document.getElementById('meme-result');
+        resultDiv.innerHTML = 'Generating meme...';
+        const formData = new FormData();
+        formData.append('template', templateInput.files[0]);
+        formData.append('caption', captionInput.value);
+        fetch('/generate-meme', {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to generate meme');
+          return res.blob();
+        })
+        .then(blob => {
+          const url = URL.createObjectURL(blob);
+          resultDiv.innerHTML = `<img src="${url}" alt="Generated Meme" class="mx-auto rounded shadow">`;
+        })
+        .catch(() => {
+          resultDiv.textContent = 'Error generating meme.';
+        });
+      });
+    }
+  });
+  
+  // Tech News & Trends Handlers
+  window.addEventListener('DOMContentLoaded', function() {
+    const newsResults = document.getElementById('news-results');
+    function renderNews(items) {
+      if (!items || items.length === 0) {
+        newsResults.innerHTML = '<p class="text-gray-500">No results found.</p>';
+        return;
+      }
+      newsResults.innerHTML = '<ul class="space-y-2">' +
+        items.map(item => `<li><a href="${item.url}" target="_blank" class="text-blue-600 hover:underline">${item.title}</a></li>`).join('') +
+        '</ul>';
+    }
+    function fetchNews(endpoint) {
+      newsResults.innerHTML = 'Loading...';
+      fetch(endpoint)
+        .then(res => res.json())
+        .then(data => {
+          if (data.results) renderNews(data.results);
+          else newsResults.innerHTML = data.error || 'Error fetching news.';
+        })
+        .catch(() => {
+          newsResults.innerHTML = 'Error fetching news.';
+        });
+    }
+    const githubBtn = document.getElementById('fetch-github');
+    if (githubBtn) githubBtn.onclick = () => fetchNews('/fetch-github-trending');
+    const hnBtn = document.getElementById('fetch-hackernews');
+    if (hnBtn) hnBtn.onclick = () => fetchNews('/fetch-hackernews');
+    const devtoBtn = document.getElementById('fetch-devto');
+    if (devtoBtn) devtoBtn.onclick = () => fetchNews('/fetch-devto');
+  });
+  
+  // Sentiment Analysis Handler
+  window.addEventListener('DOMContentLoaded', function() {
+    const sentimentForm = document.getElementById('sentiment-form');
+    if (sentimentForm) {
+      sentimentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const text = document.getElementById('sentiment-text').value;
+        const resultDiv = document.getElementById('sentiment-result');
+        resultDiv.textContent = 'Analyzing...';
+        fetch('/analyze-sentiment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.polarity !== undefined && data.subjectivity !== undefined) {
+            resultDiv.innerHTML = `<div class='mb-2'>Polarity: <b>${data.polarity.toFixed(3)}</b></div><div>Subjectivity: <b>${data.subjectivity.toFixed(3)}</b></div>`;
+          } else {
+            resultDiv.textContent = data.error || 'Error analyzing sentiment.';
+          }
+        })
+        .catch(() => {
+          resultDiv.textContent = 'Error analyzing sentiment.';
+        });
+      });
+    }
+  });
+  
+  // Save Post Handler
+  window.addEventListener('DOMContentLoaded', function() {
+    const saveBtn = document.getElementById('save-btn');
+    if (saveBtn) {
+      saveBtn.onclick = function() {
+        const text = document.getElementById('generated-text').textContent;
+        if (!text || text === 'Generating with AI...' || text === 'Error generating content.' || text === 'Error connecting to AI service.') {
+          alert('No content to save!');
+          return;
+        }
+        fetch('/save-content', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: text })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            saveBtn.textContent = 'Saved!';
+            setTimeout(() => { saveBtn.textContent = '💾 Save Post'; }, 1500);
+          } else {
+            alert(data.error || 'Error saving content.');
+          }
+        })
+        .catch(() => {
+          alert('Error saving content.');
+        });
+      };
+    }
+    // Export Content Handler
+    const exportBtn = document.getElementById('export-content-btn');
+    const exportResult = document.getElementById('export-content-result');
+    if (exportBtn) {
+      exportBtn.onclick = function() {
+        exportResult.textContent = 'Preparing download...';
+        fetch('/export-content')
+          .then(res => {
+            if (!res.ok) throw new Error('No content to export.');
+            return res.blob();
+          })
+          .then(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'generated_content.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            exportResult.textContent = 'Download started!';
+            setTimeout(() => { exportResult.textContent = ''; }, 2000);
+          })
+          .catch(() => {
+            exportResult.textContent = 'No content to export.';
+          });
+      };
+    }
+  });
+  
