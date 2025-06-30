@@ -51,3 +51,6 @@ instance/
 # Database
 *.db
 *.sqlite
+
+# Ignore secret config
+config/secret.py

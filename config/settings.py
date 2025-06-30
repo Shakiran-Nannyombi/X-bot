@@ -1,9 +1,15 @@
 import os
 
+# Try to import SECRET_KEY from secret.py in development
+try:
+    from .secret import SECRET_KEY
+except ImportError:
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+
 class Config:
     """Base configuration class"""
     DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+    SECRET_KEY = SECRET_KEY
     
     # App settings
     APP_NAME = "X Growth Bot"
@@ -29,8 +35,9 @@ class ProductionConfig(Config):
     DEBUG = False
     SECRET_KEY = os.environ.get('SECRET_KEY')
     
-    if not SECRET_KEY:
-        raise ValueError("SECRET_KEY environment variable must be set in production")
+    def __init__(self):
+        if not self.SECRET_KEY:
+            raise ValueError("SECRET_KEY environment variable must be set in production")
 
 # Configuration dictionary
 config = {
