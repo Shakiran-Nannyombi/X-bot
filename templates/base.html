@@ -2,10 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>X-bot</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}X Growth Bot{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block extra_head %}{% endblock %}
 </head>
-<body>
-    {% block content %}{% endblock %}
+<body class="content-area">
+    <div class="container-custom">
+        <!-- Header -->
+        <div class="app-header">
+            <h1 class="app-title">🚀 X Growth Bot</h1>
+            <p class="app-subtitle">Generate engaging content for developers & data scientists</p>
+        </div>
+
+        <!-- Notification Status -->
+        <div id="notification-status" class="mb-6 p-4 rounded-lg border hidden">
+            <div class="flex items-center">
+                <span id="notification-icon" class="mr-2"></span>
+                <span id="notification-text"></span>
+            </div>
+        </div>
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_scripts %}{% endblock %}
 </body>
-</html> 
+</html>

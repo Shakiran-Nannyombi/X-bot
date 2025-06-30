@@ -1,4 +1,231 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block title %}Dashboard - X Growth Bot{% endblock %}
+
 {% block content %}
-<h1>Welcome to X-bot Dashboard</h1>
-{% endblock %} 
+<!-- Navigation Tabs -->
+<div class="nav-container">
+    <div class="nav-tabs">
+        <button id="generator-tab" class="tab-button active px-4 py-2 rounded-md font-medium transition-colors text-sm">
+            📝 Generator
+        </button>
+        <button id="scheduler-tab" class="tab-button px-4 py-2 rounded-md font-medium transition-colors text-sm">
+            ⏰ Scheduler
+        </button>
+        <button id="saved-tab" class="tab-button px-4 py-2 rounded-md font-medium transition-colors text-sm">
+            💾 Saved
+        </button>
+        <button id="analytics-tab" class="tab-button px-4 py-2 rounded-md font-medium transition-colors text-sm">
+            📊 Analytics
+        </button>
+    </div>
+</div>
+
+<!-- Generator Tab -->
+<div id="generator-content" class="tab-content">
+    <!-- Content Generation -->
+    <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4">Generate Content</h2>
+        
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label">Content Type</label>
+                <select id="content-type" class="select-field">
+                    <option value="educational">📚 Educational Thread</option>
+                    <option value="project">🚀 Project Highlight</option>
+                    <option value="career">💼 Career Advice</option>
+                    <option value="resources">📚 Resource Sharing</option>
+                    <option value="challenge">🧩 Coding Challenge</option>
+                    <option value="motivational">💪 Motivational</option>
+                    <option value="engagement">💬 Engagement</option>
+                    <option value="trending">🔥 Trending Topic</option>
+                    <option value="reply">💬 Reply Suggestion</option>
+                    <option value="meme">😂 Meme Concept</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Topic (Optional)</label>
+                <select id="topic" class="select-field">
+                    <option value="">Random</option>
+                    <option value="Python">Python</option>
+                    <option value="JavaScript">JavaScript</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="Machine Learning">Machine Learning</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="Career">Career</option>
+                </select>
+            </div>
+        </div>
+        
+        <button id="generate-btn" class="btn-primary w-full">
+            Generate Content 🎯
+        </button>
+    </div>
+
+    <!-- Generated Content -->
+    <div id="content-output" class="bg-white rounded-lg shadow-sm border p-6 hidden">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold">Generated Content</h3>
+            <span id="char-count" class="text-sm text-gray-500"></span>
+        </div>
+        
+        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+            <p id="generated-text" class="whitespace-pre-wrap"></p>
+        </div>
+        
+        <div class="flex gap-3">
+            <button id="copy-btn" class="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                📋 Copy to Clipboard
+            </button>
+            <button id="save-btn" class="flex-1 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                💾 Save Post
+            </button>
+            <button id="regenerate-btn" class="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors">
+                🔄
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Scheduler Tab -->
+<div id="scheduler-content" class="tab-content hidden">
+    <div class="bg-white rounded-lg shadow-sm border p-6">
+        <h2 class="text-xl font-semibold mb-4">📅 Posting Schedule & Notifications</h2>
+        
+        <!-- Notification Permission -->
+        <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h3 class="font-medium text-blue-800 mb-2">🔔 Enable Notifications</h3>
+            <p class="text-blue-700 text-sm mb-3">Get reminded when it's time to post for maximum engagement!</p>
+            <button id="enable-notifications" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                Enable Browser Notifications
+            </button>
+        </div>
+
+        <!-- Optimal Posting Times -->
+        <div class="mb-6">
+            <h3 class="font-medium mb-3">⏰ Optimal Posting Times</h3>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="p-4 bg-orange-50 rounded-lg border border-orange-200">
+                    <div class="flex items-center mb-2">
+                        <span class="text-2xl mr-2">🌅</span>
+                        <div>
+                            <h4 class="font-medium text-orange-800">Morning Peak</h4>
+                            <p class="text-sm text-orange-600">8:00 - 10:00 AM</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-orange-700">People checking X before work</p>
+                    <label class="flex items-center mt-2">
+                        <input type="checkbox" id="morning-enabled" class="mr-2" checked>
+                        <span class="text-sm">Enable notifications</span>
+                    </label>
+                    <input type="time" id="morning-time" value="09:00" class="mt-2 w-full p-2 border rounded text-sm">
+                </div>
+
+                <div class="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                    <div class="flex items-center mb-2">
+                        <span class="text-2xl mr-2">☀️</span>
+                        <div>
+                            <h4 class="font-medium text-yellow-800">Afternoon Peak</h4>
+                            <p class="text-sm text-yellow-600">12:00 - 3:00 PM</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-yellow-700">Lunch break & afternoon scrolling</p>
+                    <label class="flex items-center mt-2">
+                        <input type="checkbox" id="afternoon-enabled" class="mr-2" checked>
+                        <span class="text-sm">Enable notifications</span>
+                    </label>
+                    <input type="time" id="afternoon-time" value="13:30" class="mt-2 w-full p-2 border rounded text-sm">
+                </div>
+
+                <div class="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                    <div class="flex items-center mb-2">
+                        <span class="text-2xl mr-2">🌆</span>
+                        <div>
+                            <h4 class="font-medium text-purple-800">Evening Peak</h4>
+                            <p class="text-sm text-purple-600">7:00 - 9:00 PM</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-purple-700">After work relaxation time</p>
+                    <label class="flex items-center mt-2">
+                        <input type="checkbox" id="evening-enabled" class="mr-2" checked>
+                        <span class="text-sm">Enable notifications</span>
+                    </label>
+                    <input type="time" id="evening-time" value="20:00" class="mt-2 w-full p-2 border rounded text-sm">
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Settings -->
+        <button id="save-schedule" class="w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors font-medium">
+            💾 Save Notification Settings
+        </button>
+
+        <!-- Next Notifications -->
+        <div id="next-notifications" class="mt-6 p-4 bg-gray-50 rounded-lg hidden">
+            <h4 class="font-medium mb-2">📋 Next Scheduled Notifications:</h4>
+            <div id="notification-list" class="space-y-2"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Saved Posts Tab -->
+<div id="saved-content" class="tab-content hidden">
+    <div class="bg-white rounded-lg shadow-sm border p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">💾 Saved Posts</h2>
+            <button id="clear-saved" class="text-red-600 hover:text-red-700 text-sm">Clear All</button>
+        </div>
+        <div id="saved-posts" class="space-y-4">
+            <p class="text-gray-500 text-center py-8">No saved posts yet. Generate and save some content!</p>
+        </div>
+    </div>
+</div>
+
+<!-- Analytics Tab -->
+<div id="analytics-content" class="tab-content hidden">
+    <div class="bg-white rounded-lg shadow-sm border p-6">
+        <h2 class="text-xl font-semibold mb-4">📊 Content Analytics</h2>
+
+        <!-- Content Type Distribution -->
+        <div class="mb-6">
+            <h3 class="font-medium mb-3">Content Type Distribution</h3>
+            <div id="content-distribution" class="space-y-2">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Generation Stats -->
+        <div class="analytics-grid">
+            <div class="metric-card status-card info">
+                <h4 class="metric-label text-blue-800">Total Generated</h4>
+                <p id="total-generated" class="metric-value text-blue-600">0</p>
+            </div>
+            <div class="metric-card status-card success">
+                <h4 class="metric-label text-green-800">Posts Used</h4>
+                <p id="posts-used" class="metric-value text-green-600">0</p>
+            </div>
+            <div class="metric-card status-card warning">
+                <h4 class="metric-label text-purple-800">Success Rate</h4>
+                <p id="success-rate" class="metric-value text-purple-600">0%</p>
+            </div>
+        </div>
+
+        <!-- Best Performing Content Types -->
+        <div class="mb-6">
+            <h3 class="font-medium mb-3">Most Generated Content Types</h3>
+            <div id="top-content-types" class="space-y-2">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+            <h3 class="font-medium text-yellow-800 mb-2">💡 Recommendations</h3>
+            <div id="recommendations" class="text-sm text-yellow-700">
+                <p>Generate more content to see personalized recommendations!</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

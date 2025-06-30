@@ -1,6 +1,125 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    margin: 0;
-    padding: 0;
-} 
+/* Custom Tailwind CSS Extensions */
+
+/* Tab System */
+.tab-button {
+    @apply text-gray-600 bg-transparent transition-all duration-200 ease-in-out;
+  }
+  
+  .tab-button.active {
+    @apply text-gray-900 bg-gray-100 shadow-sm;
+  }
+  
+  .tab-button:hover:not(.active) {
+    @apply text-gray-700 bg-gray-50;
+  }
+  
+  /* Custom Components */
+  .btn-primary {
+    @apply bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium;
+  }
+  
+  .select-field {
+    @apply w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white;
+  }
+  
+  /* Form Styling */
+  .form-group {
+    @apply mb-4;
+  }
+  
+  .form-label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
+  }
+  
+  .form-grid {
+    @apply grid gap-4;
+  }
+  
+  @media (min-width: 768px) {
+    .form-grid {
+      @apply grid-cols-2;
+    }
+  }
+  
+  /* Content Area Styling */
+  .content-area {
+    @apply min-h-screen bg-gray-50;
+  }
+  
+  .container-custom {
+    @apply container mx-auto px-4 py-8 max-w-6xl;
+  }
+  
+  /* Header Styling */
+  .app-header {
+    @apply text-center mb-8;
+  }
+  
+  .app-title {
+    @apply text-4xl font-bold text-gray-800 mb-2;
+    background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .app-subtitle {
+    @apply text-gray-600 text-lg;
+  }
+  
+  /* Navigation Styling */
+  .nav-container {
+    @apply flex justify-center mb-8;
+  }
+  
+  .nav-tabs {
+    @apply bg-white rounded-lg p-1 shadow-sm border flex flex-wrap;
+  }
+  
+  /* Analytics Styling */
+  .analytics-grid {
+    @apply grid gap-4 mb-6;
+  }
+  
+  @media (min-width: 768px) {
+    .analytics-grid {
+      @apply grid-cols-3;
+    }
+  }
+  
+  .metric-card {
+    @apply p-4 rounded-lg border;
+  }
+  
+  .metric-value {
+    @apply text-2xl font-bold;
+  }
+  
+  .metric-label {
+    @apply font-medium;
+  }
+  
+  /* Status Cards */
+  .status-card.success {
+    @apply bg-green-50 border-green-200;
+  }
+  
+  .status-card.warning {
+    @apply bg-yellow-50 border-yellow-200;
+  }
+  
+  .status-card.info {
+    @apply bg-blue-50 border-blue-200;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .nav-tabs {
+      @apply flex-col space-y-1;
+    }
+  
+    .form-grid {
+      @apply grid-cols-1;
+    }
+  }
+  
