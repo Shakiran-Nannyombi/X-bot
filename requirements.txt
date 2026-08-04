@@ -13,3 +13,4 @@ openai==1.52.0
 python-dotenv==1.0.1
 google-generativeai==0.8.3
 ollama
+gunicorn>=21.2.0
